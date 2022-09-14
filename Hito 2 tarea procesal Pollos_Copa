@@ -1,0 +1,77 @@
+CREAR BASE DE DATOS POLLOS_COPA;
+USAR POLLOS_COPA;
+
+CREAR MESA cliente(
+id_cliente INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+nombre completo VARCHAR(50) NO NULO,
+apellido VARCHAR(50) NO NULO,
+edad ENTERO NO NULO,
+domicilio VARCHAR(100) NOT NULL
+);
+
+INSERTAR EN cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALORES ('01','Miguel' ,'Gonzales Veliz', 20,'Av. 6 de Agosto');
+INSERTAR EN cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALORES ('02', 'Sandra', 'Mavir Uria', 25, 'Av.Salaeda');
+INSERTAR EN cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALORES ('03','Joel' ,'Adubiri Mondar', 30,'plaza.santiago');
+INSERTAR EN cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALORES ('04','Andrea' ,'Arias Ballesteros','35','Av. boliv');
+INSERTAR EN cliente (id_cliente, fulname, lastname, edad, domicilio)
+  VALORES ('05', 'Santos', 'Montes Valenzuela', 24, 'Av. 6 de Octubre');
+
+SELECCIONE est.*
+DESDE cliente AS est;
+
+CREAR TABLA pedido(
+    id_pedido INTEGER AUTO_INCREMENT CLAVE PRINCIPAL NO NULO,
+    articulo VARCHAR(50) NO NULO,
+    costo NUMERICO(10) NO NULO,
+    fecha ENTERO NO NULO
+);
+
+
+CREAR TABLA detallepedido(
+id_detalle_pedido INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+id_cliente ENTERO NO NULO,
+id_pedido ENTERO NO NULO,
+  CLAVE EXTRANJERA (id_cliente)REFERENCIAS cliente(id_cliente),
+  CLAVE EXTRANJERA (id_pedido)REFERENCIAS pedido(id_pedido)
+);
+
+INSERTAR EN pedido (articulo,costo,fecha) VALORES (21,100,15-22);
+INSERTAR EN pedido (articulo,costo,fecha) VALORES (22,110,16-22);
+INSERTAR EN pedido (articulo,costo,fecha) VALORES (23,112,17-22);
+INSERTAR EN pedido (articulo,costo,fecha) VALORES (24,220,18-22);
+INSERTAR EN pedido (articulo,costo,fecha) VALORES (25,213,19-22);
+
+SELECCIONE est.id_cliente,
+       nombre completo,
+       est.apellido,
+       mat.articulo,
+       mat.costo,
+       mat.fecha
+DESDE cliente AS est
+       UNIÓN INTERNA detallepedido AS ins ON est.id_cliente = ins.id_detalle_pedido
+       INNER JOIN pedido AS mat ON ins.id_pedido = mat.id_pedido
+DONDE mat.costo = 100;
+
+SELECCIONE la cuenta (est.id_cliente)
+DESDE cliente AS est;
+
+SELECCIONAR PROMEDIO(edad estimada)
+DESDE cliente AS est;
+
+SELECCIONE MAX(edad estimada)
+DESDE cliente AS est;
+
+SELECCIONE MIN(edad estimada)
+DESDE cliente AS est;
+
+#Agrupar por id_est y mostrar el
+#promedio del id_mat en la tabla
+#inscripción
+
+SELECCIONE ins.id_cliente, AVG(ins.id_pedido)
+DESDE detallepedido AS ins
+GRUPO POR ins.id_cliente;
